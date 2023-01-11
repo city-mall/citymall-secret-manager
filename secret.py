@@ -45,7 +45,7 @@ def get_secret(secret_name):
             decoded_binary_secret = base64.b64decode(get_secret_value_response['SecretBinary'])
             return decoded_binary_secret
 
-def loadSecret(prefix, secret_name, secretFile):
+def loadSecret(secret_name, secretFile):
     print("Saving", secret_name, "secrets to", secretFile.name)
     data=get_secret(secret_name)
     secret = json.loads(data)
@@ -59,7 +59,7 @@ def loadSecret(prefix, secret_name, secretFile):
     #             "port": 3306
     #         }
     for key, value in secret.items():
-        secretFile.write(prefix + key.upper() + "=" + "'" + str(value) + "'" + "\n")
+        secretFile.write(key.upper() + "=" + "'" + str(value) + "'" + "\n")
     print("Done fetching secrets", secret_name)
 
 print("Running init container script")
@@ -67,5 +67,4 @@ allSecrets = getSecretKeys()
 secretFileName = getSecretFileName()
 with open(secretFileName,"w") as secretFile:
     for key, secret_name in allSecrets.items():
-        prefix = f'{key.split("_")[1]}_'
-        loadSecret(prefix, secret_name, secretFile)
+        loadSecret(secret_name, secretFile)
