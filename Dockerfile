@@ -6,4 +6,4 @@ WORKDIR /app
 
 COPY ./secret.py .
 
-CMD ["python", "secret.py"]
+CMD python secret.py; chmod +x /secret/secret.env
